@@ -1,5 +1,5 @@
 import express from 'express';
-import { login, postUserDetails, signup, userDetails } from '../controllers/user.controller.js';
+import { login, logout, postUserDetails, signup, userDetails } from '../controllers/user.controller.js';
 import { authenticateJWT } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
@@ -9,6 +9,8 @@ const router = express.Router();
 router.post('/signup',signup)
 
 router.post('/login',login)
+
+router.post('/logout',logout)
 
 router.get('/user',authenticateJWT , userDetails)
 

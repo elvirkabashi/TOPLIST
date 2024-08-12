@@ -2,12 +2,16 @@ import express from 'express';
 import dotenv from 'dotenv';
 import sequelize from './config/database.js';
 import bodyParser from 'body-parser';
+import cors from 'cors';
 
 
 import userRoutes from './routes/user.routes.js';
 import pageRoutes from './routes/page.routes.js'
 import categoryRoutes from './routes/category.routes.js'
 import toplistRoutes from './routes/toplist.routes.js'
+import ruleRoutes from './routes/rule.routes.js'
+import voteRoutes from './routes/vote.routes.js'
+import adminRoutes from './routes/admin.routes.js'
 
 
 import User from './models/user.js'
@@ -41,7 +45,7 @@ dotenv.config();
 
 app.use(bodyParser.json());
 
-
+app.use(cors());
 
 
 
@@ -98,6 +102,13 @@ app.use("/api/user", userRoutes);
 app.use("/api", pageRoutes);
 app.use("/api", categoryRoutes);
 app.use("/api", toplistRoutes);
+app.use("/api", ruleRoutes);
+app.use("/api", voteRoutes);
+
+
+app.use("/api/admin", adminRoutes);
+
+
 
 sequelize.sync({ force: false }).then(() => {
     const PORT = process.env.PORT || 5000;

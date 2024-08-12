@@ -1,16 +1,19 @@
 import express from 'express';
-import { createPage, deletePage, getPageById, getUserPages, updatePage } from '../controllers/page.controller.js';
+import { addHit, createPage, deletePage, getPageById, getPageHits, getUserPages, updatePage } from '../controllers/page.controller.js';
 import { authenticateJWT } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
 
-router.post('/pages/:categoryId',authenticateJWT ,createPage)
+router.post('/pages',authenticateJWT ,createPage)
 router.get('/pages',authenticateJWT ,getUserPages)
-router.get('/pages/:id',authenticateJWT ,getPageById)
+router.get('/pages/:id',getPageById)
 router.put('/pages/:id',authenticateJWT ,updatePage)
 router.delete('/pages/:id',authenticateJWT ,deletePage)
 
+
+router.post('/hit', addHit)
+router.get('/hits',authenticateJWT, getPageHits)
 
 
 export default router;

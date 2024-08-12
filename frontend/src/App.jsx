@@ -1,33 +1,42 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import Navbar from './components/Navbar'
+import { Navigate, Route, Routes } from "react-router-dom"
+import SignUp from "./pages/signup/SignUp"
+import { Toaster } from 'react-hot-toast'
+import CreatePage from './pages/dashboard/pages/CreatePage'
+import { useAuthContext } from "./context/AuthContext"
+import LogIn from './pages/login/LogIn'
+import Home from './pages/home/Home'
+import PageDetails from './components/PageDetails'
+import UserDashboard from './pages/dashboard/UserDashboard'
+import AdminDashboard from './pages/dashboard/AdminDashboard'
+import EditPage from './pages/dashboard/pages/EditPage'
+import UserList from './components/UserList'
+
+
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  const {authUser} = useAuthContext()
+
+  const userRole = authUser?.role;
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    <Toaster/>
+    <Navbar/>
+     <Routes>
+        <Route path='/' element={<Home/>}/>
+        <Route path='/createpage' element={authUser ? <CreatePage/> :<Navigate to='/login' /> }/>
+        <Route path='/details/:id' element={ <PageDetails/>}/>
+        <Route path='/editPage/:id' element={ authUser ? <EditPage/> :<Navigate to='/login' />}/>
+
+        <Route path='/dashboard' element={authUser ? userRole === 'admin' ? <AdminDashboard/> : <UserDashboard/> : <Navigate to='/login' />}/>
+        <Route path='/users' element={authUser ? userRole === 'admin' ? <UserList/> : <Navigate to='/' /> : <Navigate to='/login' />}/>
+
+        <Route path='/signup' element={authUser ? <Navigate to='/' /> : <SignUp/>} />
+        <Route path='/login' element={authUser ? <Navigate to='/' /> : <LogIn/>} /> 
+        {/* <Route path='/' element={authUser ? userRole === 'admin' ? <Navbar/> : 'test' : <Navigate to='/login' />} /> */}
+     </Routes>
     </>
   )
 }
